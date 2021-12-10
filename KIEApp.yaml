@@ -1,0 +1,87 @@
+apiVersion: app.kiegroup.org/v2
+kind: KieApp
+metadata:
+  name: rhpam-authoring-7
+  namespace: process-automation
+spec:
+  commonConfig:
+    adminPassword: redhatpam1!
+    adminUser: pamAdmin
+  environment: rhpam-authoring
+  objects:
+    console:
+      env:
+        - name: LOGGER_CATEGORIES
+          value: org.guvnor.m2repo:DEBUG,org.appformer.maven:DEBUG,org.eclipse.aether:TRACE,org.kie:DEBUG
+        - name: KIE_SERVER_CONTROLLER_OPENSHIFT_ENABLED
+          value: 'false'
+        - name: MAVEN_MIRROR_URL
+          value: http://<nexus-host>>.<<nexus-namespace>>.svc.cluster.local:8080/repository/rhpam-maven/
+        - name: MAVEN_REPOS
+          value: 'RHPAMCENTR,SNAPSHOTS,RELEASES'
+        - name: SNAPSHOTS_MAVEN_REPO_ID
+          value: nexus-snapshots
+        - name: SNAPSHOTS_MAVEN_REPO_URL
+          value: http://<nexus-host>>.<<nexus-namespace>>.svc.cluster.local:8080/repository/rhpam-snapshot/
+        - name: SNAPSHOTS_MAVEN_REPO_USERNAME
+          value: pamuser
+        - name: SNAPSHOTS_MAVEN_REPO_PASSWORD
+          value: Pamuser@123
+        - name: RELEASES_MAVEN_REPO_ID
+          value: nexus-releases
+        - name: RELEASES_MAVEN_REPO_URL
+          value: http://<nexus-host>>.<<nexus-namespace>>.svc.cluster.local:8080/repository/rhpam-release/
+        - name: RELEASES_MAVEN_REPO_USERNAME
+          value: pamuser
+        - name: RELEASES_MAVEN_REPO_PASSWORD
+          value: Pamuser@123
+      replicas: 1
+      resources:
+        limits:
+          cpu: 4
+          memory: 8Gi
+        requests:
+          cpu: 2
+          memory: 3Gi      
+    servers:
+      - database:
+          externalConfig:
+            dialect: org.hibernate.dialect.PostgreSQLDialect
+            driver: postgresql
+            host: <DB-Host>>.svc.cluster.local
+            name: pam
+            password: Pamuser@123
+            port: '5432'
+            username: pamuser
+          type: external
+        env:
+          - name: LOGGER_CATEGORIES
+            value: org.guvnor.m2repo:DEBUG,org.appformer.maven:DEBUG,org.eclipse.aether:TRACE,org.kie:DEBUG
+          - name: MAVEN_REPO_URL
+            value: http://<nexus-host>>.<<nexus-namespace>>.svc.cluster.local:8080/repository/rhpam-snapshot/
+          - name: MAVEN_REPO_ID
+            value: nexus-repo
+          - name: KIE_SERVER_STARTUP_STRATEGY
+            value: ControllerBasedStartupStrategy
+          - name: KIE_SERVER_BYPASS_AUTH_USER
+            value: 'true'
+          - name: KIE_SERVER_URL
+            value: http://kie-server-dev.process-automation.svc.cluster.local:8080/services/rest/server
+          - name: KIE_SERVER_CONTROLLER_HOST
+            value: rhpam-authoring-7-rhpamcentr.process-automation.svc.cluster.local
+          - name: KIE_SERVER_CONTROLLER_PORT
+            value: '8080'
+          - name: KIE_SERVER_CONTROLLER_PROTOCOL
+            value: http
+        id: kie-server-dev
+        jvm:
+          javaOptsAppend: "-Dorg.kie.persistence.postgresql.useBytea=true"
+        name: kie-server-dev
+        replicas: 1
+        resources:
+          limits:
+            cpu: 4
+            memory: 8Gi
+          requests:
+            cpu: 2
+            memory: 3Gi
