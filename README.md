@@ -11,7 +11,7 @@ Create Offline Repository
     a. Unzip it to a folder
     b. Run the offline-repo-builder.sh, this will create a folder called repository
  2. Compress the repository folder (maven offline repository) and copy it over to the Nexus or Artifactory repo server
- 3. Download the maven repo provisioner tool to push the artifacts to the maven repo (rhpam-maven repository or another repo of choice) - ([maven-repository-
+ 3. Download the maven repo provisioner tool  on the repo server to push the artifacts to the maven repo (rhpam-maven repository or another repo of choice) - ([maven-repository-
     provisioner-1.4.1-jar-with-dependencies.jar](https://repo.maven.apache.org/maven2/com/simpligility/maven/maven-repository-provisioner/1.4.1/maven-repository-provisioner-1.4.1-jar-with-dependencies.jar))
  4. Run the maven repo provisioner tool 
     a. java - jar maven-repository-provisioner-*-jar-with-dependencies.jar  -cd “<< path to the repository folder >>” -t “<< repo url >>" -u << repo user name >>  -p 
