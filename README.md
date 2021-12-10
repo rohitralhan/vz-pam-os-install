@@ -14,8 +14,8 @@ Create Offline Repository
  3. Download the maven repo provisioner tool to push the artifacts to the maven repo (rhpam-maven repository or another repo of choice) - (maven-repository-
     provisioner-1.4.1-jar-with-dependencies.jar)
  4. Run the maven repo provisioner tool 
-    a. java - jar maven-repository-provisioner-*-jar-with-dependencies.jar  -cd “<<path to the repository folder>>” -t “<<repo url>>" ﻿-u <<repo user name>>  -p 
-       <<repo user password>>
+    a. java - jar maven-repository-provisioner-*-jar-with-dependencies.jar  -cd “<<path to the repository folder>>” -t “<< repo url >>" -u << repo user name >>  -p 
+       << repo user password >>
 
 Install/Configure the postgres DB with byteea
  1. Scripts attached for RH PAM 7.11.1
